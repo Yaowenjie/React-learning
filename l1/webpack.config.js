@@ -1,5 +1,7 @@
 module.exports = {
-  entry: './main.js',
+  entry: {
+    app: ['./main.js', './counter.js']
+  },
   output: {
     path : './',
     filename: 'index.js'

@@ -14,21 +14,35 @@ header {
 }
 
 .container {
-  height: 95vh;
   display: flex;
 }
 
 pre {
-  background-color: #f8f8f8;
+  background-color: #FCFAF2;
 }
 
 pre, textarea {
   width: 50%;
   font-family: monospace;
-  font-size: 24px;
+  font-size: 18px;
   margin: 0;
   padding: 10px;
   color: #222;
+  min-height: 600px;
 }
 
 textarea:focus {outline: 0;}
+
+button {
+  width: 50px;
+  height: 30px;
+  border-radius: 10%;
+  margin: 5px;
+  color: #FCFAF2;
+  font-size: larger;
+}
+#counter h1 {
+  background-color: cornsilk;
+  max-width: 25%;
+  padding: 10px;
+}
