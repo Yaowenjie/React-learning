@@ -13,6 +13,18 @@ const reducer = (state = [], action) => {
           completed: false
         }
       ];
+    case 'TOGGLE_TODO':
+      return state.map(todo => {
+        if (todo.id !== action.id) {
+          return todo;
+        }
+
+        return {
+          id: todo.id,
+          text: todo.text,
+          completed: !todo.completed
+        }
+      })
     default:
       return state;
   }
@@ -33,7 +45,9 @@ class AddTodo extends Component {
 const TodoList = ({todos}) => {
   return (<ul>
     {todos.map(todo => {
-      return <li key={todo.id}>{todo.text}</li>
+      return <li key={todo.id}
+                 onClick={() => {store.dispatch({type: 'TOGGLE_TODO', id: todo.id})}}
+                 style={{textDecoration: todo.completed ? 'line-through' : 'none'}}>{todo.text}</li>
     })}
   </ul>)
 };
