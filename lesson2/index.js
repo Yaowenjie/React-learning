@@ -2,29 +2,39 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import {createStore} from 'redux';
 
+
+const todoReducer = (state, action) => {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return {
+        id: action.id,
+        text: action.text,
+        completed: false
+      };
+    case 'TOGGLE_TODO':
+      if (state.id !== action.id) {
+        return state;
+      }
+
+      return {
+        ...state,
+        completed: !state.completed
+      }
+  }
+};
+
 const reducer = (state = [], action) => {
   switch (action.type) {
     case 'ADD_TODO':
       return [
         ...state,
-        {
-          id: action.id,
-          text: action.text,
-          completed: false
-        }
+        todoReducer(undefined, action)
       ];
     case 'TOGGLE_TODO':
       return state.map(todo => {
-        if (todo.id !== action.id) {
-          return todo;
-        }
+        return todoReducer(todo, action)
+      });
 
-        return {
-          id: todo.id,
-          text: todo.text,
-          completed: !todo.completed
-        }
-      })
     default:
       return state;
   }
@@ -37,7 +47,7 @@ class AddTodo extends Component {
   render() {
     return <div>
       <input type="text" ref={node => { this.input = node }} />
-      <button onClick={() => {store.dispatch({type: 'ADD_TODO', id: nextTodoId++, text: this.input.value})}}>AddTodo</button>
+      <button onClick={() => {store.dispatch({type: 'ADD_TODO', id: nextTodoId++, text: this.input.value}); this.input.value = ''}}>AddTodo</button>
     </div>
   }
 }
