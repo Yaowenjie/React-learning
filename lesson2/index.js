@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import {createStore} from 'redux';
+import {Provider} from 'react-redux';
 import {reducer} from './reducers';
 
 let nextTodoId = 0;
@@ -106,8 +107,8 @@ const VisibilityFilter = () => {
     <div>
       Show:
       <FilterLink filter="SHOW_ALL" text="All"/>
-      <FilterLink filter="SHOW_ACTIVE" text="ACTIVE"/>
-      <FilterLink filter="SHOW_COMPLETED" text="COMPLETED"/>
+      <FilterLink filter="SHOW_ACTIVE" text="Active"/>
+      <FilterLink filter="SHOW_COMPLETED" text="Completed"/>
     </div>
   )
 }
@@ -120,21 +121,6 @@ const TodoApp = () => {
       <VisibilityFilter/>
     </div>
   )
-};
-
-class Provider extends Component {
-  getChildContext() {
-    return {
-      store: this.props.store
-    }
-  }
-  render() {
-    return this.props.children;
-  }
-}
-
-Provider.childContextTypes = {
-  store: React.PropTypes.object
 };
 
 const renderApp = () => {
