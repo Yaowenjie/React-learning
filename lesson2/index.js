@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import {createStore} from 'redux';
+import {createStore, combineReducers} from 'redux';
 
 
 const todoReducer = (state, action) => {
@@ -47,12 +47,10 @@ const todosReducer = (state = [], action) => {
   }
 };
 
-const reducer = (state = {}, action) => {
-  return {
-    todos: todosReducer(state.todos, action),
-    visibilityFilter: filterReducer(state.visibilityFilter, action)
-  }
-};
+const reducer = combineReducers({
+  todos: todosReducer,
+  visiblityFilter: filterReducer
+});
 
 let store = createStore(reducer);
 
