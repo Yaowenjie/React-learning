@@ -1,55 +1,7 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
-import {createStore, combineReducers} from 'redux';
-
-const todoReducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return {
-        id: action.id,
-        text: action.text,
-        completed: false
-      };
-    case 'TOGGLE_TODO':
-      if (state.id !== action.id) {
-        return state;
-      }
-
-      return {
-        ...state,
-        completed: !state.completed
-      }
-  }
-};
-
-const filterReducer = (state = 'SHOW_ALL', action) => {
-  switch (action.type) {
-    case 'SET_VISIBILITY_FILTER':
-      return action.filter;
-    default:
-      return state;
-  }
-};
-
-const todosReducer = (state = [], action) => {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return [
-        ...state,
-        todoReducer(undefined, action)
-      ];
-    case 'TOGGLE_TODO':
-      return state.map(todo => todoReducer(todo, action));
-
-    default:
-      return state;
-  }
-};
-
-const reducer = combineReducers({
-  todos: todosReducer,
-  visibilityFilter: filterReducer
-});
+import {createStore} from 'redux';
+import {reducer} from './reducers';
 
 let store = createStore(reducer);
 
@@ -63,7 +15,8 @@ class AddTodo extends Component {
   }
 }
 
-const TodoList = ({todos, visibilityFilter}) => {
+const TodoList = () => {
+  const {todos, visibilityFilter} = store.getState()
   const getFilteredTodos = (todos, visibilityFilter) => {
     switch (visibilityFilter) {
       case 'SHOW_ALL':
@@ -84,8 +37,10 @@ const TodoList = ({todos, visibilityFilter}) => {
   </ul>)
 };
 
-const FilterLink = ({filter, currentFilter, text}) => {
-  if (filter === currentFilter) {
+const FilterLink = ({filter, text}) => {
+  const {visibilityFilter} = store.getState()
+
+  if (filter === visibilityFilter) {
     return (<span style={{marginRight: 8}}>{text}</span>)
   }
 
@@ -104,24 +59,23 @@ const FilterLink = ({filter, currentFilter, text}) => {
     </a>)
 }
 
-const VisibilityFilter = ({visibilityFilter}) => {
+const VisibilityFilter = () => {
   return (
     <div>
       Show:
-      <FilterLink filter="SHOW_ALL" currentFilter={visibilityFilter} text="All"/>
-      <FilterLink filter="SHOW_ACTIVE" currentFilter={visibilityFilter} text="ACTIVE"/>
-      <FilterLink filter="SHOW_COMPLETED" currentFilter={visibilityFilter} text="COMPLETED"/>
+      <FilterLink filter="SHOW_ALL" text="All"/>
+      <FilterLink filter="SHOW_ACTIVE" text="ACTIVE"/>
+      <FilterLink filter="SHOW_COMPLETED" text="COMPLETED"/>
     </div>
   )
 }
 
 const TodoApp = () => {
-  const {todos, visibilityFilter} = store.getState()
   return (
     <div>
       <AddTodo/>
-      <TodoList todos={todos} visibilityFilter={visibilityFilter}/>
-      <VisibilityFilter visibilityFilter={visibilityFilter}/>
+      <TodoList/>
+      <VisibilityFilter/>
     </div>
   )
 };
