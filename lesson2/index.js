@@ -23,7 +23,16 @@ const todoReducer = (state, action) => {
   }
 };
 
-const reducer = (state = [], action) => {
+const filterReducer = (state = 'SHOW_ALL', action) => {
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter;
+    default:
+      return state;
+  }
+};
+
+const todosReducer = (state = [], action) => {
   switch (action.type) {
     case 'ADD_TODO':
       return [
@@ -31,14 +40,19 @@ const reducer = (state = [], action) => {
         todoReducer(undefined, action)
       ];
     case 'TOGGLE_TODO':
-      return state.map(todo => {
-        return todoReducer(todo, action)
-      });
+      return state.map(todo => todoReducer(todo, action));
 
     default:
       return state;
   }
-}
+};
+
+const reducer = (state = {}, action) => {
+  return {
+    todos: todosReducer(state.todos, action),
+    visibilityFilter: filterReducer(state.visibilityFilter, action)
+  }
+};
 
 let store = createStore(reducer);
 
@@ -66,7 +80,7 @@ const TodoApp = () => {
   return (
     <div>
       <AddTodo/>
-      <TodoList todos={store.getState()}/>
+      <TodoList todos={store.getState().todos}/>
     </div>
   )
 };
