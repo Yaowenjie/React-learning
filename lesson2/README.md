@@ -2,11 +2,11 @@ This code was written by following **[Getting Started with Redux](https://egghea
 (creator of Redux). 
 
 ### Install
-```
+```shell
 npm install
 ```
 
 ## Run
-```js
-npm start
+```shell
+npm run start
 ```
